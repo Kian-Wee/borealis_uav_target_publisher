@@ -1,0 +1,19 @@
+<launch>	
+  <arg name="robot_name"/>
+  <arg name="human_odom_topic" default="/imu_odometry"/>
+  <arg name="target_pose_topic"  default="gun_target_pose"/>
+  <arg name="target_odom_topic"  default="gun_target_odom"/>
+  <arg name="gun_pose_topic" default="/GunPose"/>
+  <arg name="publish_rate" default="5"/>
+
+  <group ns="$(arg robot_name)">
+    <!-- Launch Gun Target Publisher -->
+    <node pkg="borealis_uav_target_publisher" type="gun_pose_publisher.py" name="gun_target_publisher" output="screen">
+      <param name="human_odom_topic" value="$(arg human_odom_topic)" />
+      <param name="target_pose_topic" value="$(arg target_pose_topic)" />
+      <param name="target_odom_topic" value="$(arg target_odom_topic)" />
+      <param name="gun_pose_topic" value="$(arg gun_pose_topic)" />
+      <param name="publish_rate" value="$(arg publish_rate)" />
+    </node>
+  </group>
+</launch>

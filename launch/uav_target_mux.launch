@@ -1,0 +1,23 @@
+<launch>	
+  <arg name="robot_name"/>
+  <arg name="gun_target_odom_topic" default="gun_target_odom"/>
+  <arg name="gun_target_pose_topic"  default="gun_target_pose"/>
+  <arg name="follow_me_target_odom_topic"  default="follow_me_target_odom"/>
+  <arg name="follow_me_target_pose_topic" default="follow_me_target_pose"/>
+  <arg name="target_odom_topic"  default="target_odom"/>
+  <arg name="target_pose_topic"  default="target_pose"/>
+  <arg name="command_topic" default="/command"/>
+
+  <group ns="$(arg robot_name)">
+    <!-- Launch Target Multiplexer -->
+    <node pkg="borealis_uav_target_publisher" type="target_multiplexer.py" name="target_mux" output="screen">
+      <param name="gun_target_odom_topic" value="$(arg gun_target_odom_topic)" />
+      <param name="gun_target_pose_topic" value="$(arg gun_target_pose_topic)" />
+      <param name="follow_me_target_odom_topic" value="$(arg follow_me_target_odom_topic)" />
+      <param name="follow_me_target_pose_topic" value="$(arg follow_me_target_pose_topic)" />
+      <param name="target_odom_topic" value="$(arg target_odom_topic)" />
+      <param name="target_pose_topic" value="$(arg target_pose_topic)" />
+      <param name="command_topic" value="$(arg command_topic)" />
+    </node>
+  </group>
+</launch>

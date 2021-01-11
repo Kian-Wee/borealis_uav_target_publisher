@@ -1,0 +1,19 @@
+<launch>	
+  <arg name="robot_name"/>
+  <arg name="human_odom_topic" default="/imu_odometry"/>
+  <arg name="target_pose_topic"  default="follow_me_target_pose"/>
+  <arg name="target_odom_topic"  default="follow_me_target_odom"/>
+  <arg name="follow_distance"/>
+  <arg name="publish_rate" default="5"/>
+
+  <group ns="$(arg robot_name)">
+    <!-- Launch Follow Me Target Publisher -->
+    <node pkg="borealis_uav_target_publisher" type="follow_me_pose_publisher.py" name="follow_me_target_publisher" output="screen">
+      <param name="human_odom_topic" value="$(arg human_odom_topic)" />
+      <param name="target_pose_topic" value="$(arg target_pose_topic)" />
+      <param name="target_odom_topic" value="$(arg target_odom_topic)" />
+      <param name="follow_distance" value="$(arg follow_distance)" />
+      <param name="publish_rate" value="$(arg publish_rate)" />
+    </node>
+  </group>
+</launch>

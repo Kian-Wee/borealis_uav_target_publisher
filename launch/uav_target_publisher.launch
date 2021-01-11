@@ -1,0 +1,18 @@
+<launch>	
+  <!--##### UAV 1 #####-->
+  <arg name="uav1_name" default="uav1"/>
+  <!-- Follow Me Target Publisher -->
+  <include file="$(find borealis_uav_target_publisher)/launch/follow_me_target_publisher.launch">
+    <arg name="robot_name" value="$(arg uav1_name)"/>
+    <arg name="follow_distance" value="4.0"/>
+  </include>
+  <!-- Gun Target Publisher -->
+  <include file="$(find borealis_uav_target_publisher)/launch/gun_target_publisher.launch">
+    <arg name="robot_name" value="$(arg uav1_name)"/>
+  </include>
+  <!-- Target Multiplexer -->
+  <include file="$(find borealis_uav_target_publisher)/launch/uav_target_mux.launch">
+    <arg name="robot_name" value="$(arg uav1_name)"/>
+  </include>
+
+</launch>

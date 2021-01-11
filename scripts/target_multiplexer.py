@@ -37,7 +37,14 @@ def follow_me_target_pose_cb(pose):
         target_pose_pub.publish(pose)
 
 def command_cb(command):
+    global mux_state
     mux_state = command.data
+    if (mux_state == 'Gun'):
+        rospy.loginfo("Gun Target Enabled")
+    elif (mux_state == 'FollowMe'):
+        rospy.loginfo("Follow Me Target Enabled")
+    else:
+        rospy.logerr("Target Mux : Invalid Command - " + command.data)
 
 def target_multiplexer():
     

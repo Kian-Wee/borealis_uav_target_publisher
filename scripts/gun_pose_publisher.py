@@ -10,6 +10,7 @@ from geometry_msgs.msg import PoseWithCovarianceStamped, Pose, Twist
 from nav_msgs.msg import Odometry
 from tf import Transformer, transformations
 import tf
+import math
 import numpy as np
 import signal
 
@@ -36,13 +37,21 @@ def gun_pose_cb(pose):
         human_tf = transformations.quaternion_matrix([qt.x, qt.y, qt.z, qt.w])
         human_tf[:3, 3] = pos.x, pos.y, pos.z
 
-        # Generate Gun TF
+        # Generate Gun TF (Gun Local Frame)
         pos, qt = pose.pose.pose.position, pose.pose.pose.orientation
         gun_tf = transformations.quaternion_matrix([qt.x, qt.y, qt.z, qt.w])
         gun_tf[:3, 3] = pos.x, pos.y, pos.z 
+        # Human Frame to Gun Frame transform
+        # human_to_gun_tf = transformations.euler_matrix(0.0, 0.0, -math.pi/2, axes='sxyz')
+        # Converting Gun TF to Human Frame
+        # gun_tf = np.dot(human_to_gun_tf, gun_tf)
+
 
         # Calculate Gun TF in Odometry frame
-        gun_tf_odom_frame = np.dot(human_tf, gun_tf)
+        # gun_tf_odom_frame = np.dot(human_tf, gun_tf)
+        gun_tf_odom_frame = gun_tf
+        gun_tf_odom_frame[:3, 3] += human_tf[:3, 3]
+
         # Transfer back to odom
         global gun_pose
         gun_pose = Pose()

@@ -21,27 +21,27 @@ command_sub = None
 mux_state = "None"
 
 def gun_target_odom_cb(odom):
-    if (mux_state=="Gun"):
+    if (mux_state=="Go"):
         target_odom_pub.publish(odom)
 
 def gun_target_pose_cb(pose):
-    if (mux_state=="Gun"):
+    if (mux_state=="Go"):
         target_pose_pub.publish(pose)
 
 def follow_me_target_odom_cb(odom):
-    if (mux_state=="FollowMe"):
+    if (mux_state=="Follow"):
         target_odom_pub.publish(odom)
 
 def follow_me_target_pose_cb(pose):
-    if (mux_state=="FollowMe"):
+    if (mux_state=="Follow"):
         target_pose_pub.publish(pose)
 
 def command_cb(command):
     global mux_state
     mux_state = command.data
-    if (mux_state == 'Gun'):
+    if (mux_state == 'Go'):
         rospy.loginfo("Gun Target Enabled")
-    elif (mux_state == 'FollowMe'):
+    elif (mux_state == 'Follow'):
         rospy.loginfo("Follow Me Target Enabled")
     else:
         rospy.logerr("Target Mux : Invalid Command - " + command.data)

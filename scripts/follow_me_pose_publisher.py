@@ -29,8 +29,9 @@ class ClassTimer():
 
         def cb(self):
             self.callback()
-            self.timer = Timer(self.interval, self.cb)
-            self.timer.start()
+            if not(rospy.is_shutdown()):
+                self.timer = Timer(self.interval, self.cb)
+                self.timer.start()
     
         def stop(self, *args):
             self.timer.cancel()

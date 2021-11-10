@@ -3,7 +3,7 @@
   <arg name="human_odom_topic" default="/imu_odometry"/>
   <arg name="target_pose_topic"  default="gun_target_pose"/>
   <arg name="target_odom_topic"  default="gun_target_odom"/>
-  <arg name="gun_pose_topic" default="/firefly/command/pose"/>
+  <arg name="gun_pose_topic" default="/borealis/command/pose"/>
   <arg name="publish_rate" default="5"/>
 
   <group ns="$(arg robot_name)">

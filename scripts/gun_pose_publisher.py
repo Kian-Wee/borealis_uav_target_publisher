@@ -1,4 +1,9 @@
 #!/usr/bin/python
+"""
+This node contains 2 Subscribers and 2 publishers.
+The 2 subscribers subscribe to the human odom and gun pose to get the data
+The other 2 publishers publishes to uav_target_odom and uav_target_pose
+"""
 
 import os
 # Constrain OPENBLAS Multithreading (To solve Numpy Performance Issues)
@@ -40,18 +45,17 @@ def gun_pose_cb(pose):
         # Generate Gun TF (Gun Local Frame)
         pos, qt = pose.pose.pose.position, pose.pose.pose.orientation
         gun_tf = transformations.quaternion_matrix([qt.x, qt.y, qt.z, qt.w])
-        gun_tf[:3, 3] = pos.x, pos.y, pos.z 
-        # Human Frame to Gun Frame transform
-        # human_to_gun_tf = transformations.euler_matrix(0.0, 0.0, -math.pi/2, axes='sxyz')
-        # Converting Gun TF to Human Frame
-        # gun_tf = np.dot(human_to_gun_tf, gun_tf)
-
+        gun_tf[:3, 3] = pos.x, pos.y, pos.z
 
         # Calculate Gun TF in Odometry frame
-        # gun_tf_odom_frame = np.dot(human_tf, gun_tf)
+        # Rotating gun pose by 90 degree yaw to match with human coordinate system
+        #yaw_90 = transformations.euler_matrix(0.0, 0.0, -math.pi/2, axes='sxyz')
+        #gun_tf_odom_frame = np.dot(yaw_90, gun_tf)
+        # Removed rotation since Sam is publishing orientation in actual human frame
         gun_tf_odom_frame = gun_tf
-        gun_tf_odom_frame[:3, 3] += human_tf[:3, 3]
-
+        # Adding human position translation to gun pose 
+        gun_tf_odom_frame[:3, 3] += human_tf[:3, 3] # Adding human translation to gun pose
+      
         # Transfer back to odom
         global gun_pose
         gun_pose = Pose()

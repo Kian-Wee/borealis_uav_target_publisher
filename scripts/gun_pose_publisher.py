@@ -35,12 +35,12 @@ def gun_pose_cb(pose):
     if(human_pose is None):
         rospy.logerr("Gun Pose Publisher: Human Odometry Not Received, but Gun Pose received")
     else:
-        # Fetch Latest Human Pose
-        current_human_pose = human_pose
-        # Generate Human TF
-        pos, qt = current_human_pose.position, current_human_pose.orientation
-        human_tf = transformations.quaternion_matrix([qt.x, qt.y, qt.z, qt.w])
-        human_tf[:3, 3] = pos.x, pos.y, pos.z
+        # # Fetch Latest Human Pose
+        # current_human_pose = human_pose
+        # # Generate Human TF
+        # pos, qt = current_human_pose.position, current_human_pose.orientation
+        # human_tf = transformations.quaternion_matrix([qt.x, qt.y, qt.z, qt.w])
+        # human_tf[:3, 3] = pos.x, pos.y, pos.z
 
         # Generate Gun TF (Gun Local Frame)
         pos, qt = pose.pose.pose.position, pose.pose.pose.orientation
@@ -54,12 +54,13 @@ def gun_pose_cb(pose):
         # Removed rotation since Sam is publishing orientation in actual human frame
         gun_tf_odom_frame = gun_tf
         # Adding human position translation to gun pose 
-        gun_tf_odom_frame[:3, 3] += human_tf[:3, 3] # Adding human translation to gun pose
+        # gun_tf_odom_frame[:3, 3] += human_tf[:3, 3] # Adding human translation to gun pose
       
         # Transfer back to odom
         global gun_pose
         gun_pose = Pose()
         gun_pose.position.x, gun_pose.position.y, gun_pose.position.z = gun_tf_odom_frame[:3,3]
+        gun_pose.position.z = 1.3
         qt = transformations.quaternion_from_matrix(gun_tf_odom_frame)
         gun_pose.orientation.x = qt[0]
         gun_pose.orientation.y = qt[1]

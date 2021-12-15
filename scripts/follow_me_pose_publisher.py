@@ -46,33 +46,37 @@ def uav_pose_cb(pose):
 def publish_uav_target_pose():
     try:
         current_pose, target_pose = target_finder.extract_poses()
-        targetOdom = Odometry()
-
-        # Populating Odometry msg
-        global sequence_number
-        targetOdom.header.frame_id = "odom"
-        targetOdom.header.stamp = rospy.get_rostime()
-        targetOdom.header.seq = sequence_number
-        sequence_number += 1
-
-        x, y, theta = target_pose
-        q = transformations.quaternion_from_euler(0.0, 0.0, theta, axes='sxyz')
-        targetOdom.pose.pose.position.x = x
-        targetOdom.pose.pose.position.y = y
-        targetOdom.pose.pose.orientation.x = q[0]
-        targetOdom.pose.pose.orientation.y = q[1]
-        targetOdom.pose.pose.orientation.z = q[2]
-        targetOdom.pose.pose.orientation.w = q[3]
-
-        uav_target_odom_pub.publish(targetOdom)
-
-        targetPose = PoseWithCovarianceStamped()
-        targetPose.header = targetOdom.header
-        targetPose.pose.pose = targetOdom.pose.pose
-        uav_target_pose_pub.publish(targetPose)
         
     except ValueError as ex:
         rospy.logerr_throttle(5.0, rospy.get_name() + " : " + str(ex))
+
+        # Publish hovering target if no follow_me target is not available
+        target_pose = 0.0, 0.0, 1.3     # x, y, z
+
+    targetOdom = Odometry()
+    # Populating Odometry msg
+    global sequence_number
+    targetOdom.header.frame_id = "odom"
+    targetOdom.header.stamp = rospy.get_rostime()
+    targetOdom.header.seq = sequence_number
+    sequence_number += 1
+
+    x, y, theta = target_pose
+    q = transformations.quaternion_from_euler(0.0, 0.0, theta, axes='sxyz')
+    targetOdom.pose.pose.position.x = x
+    targetOdom.pose.pose.position.y = y
+    targetOdom.pose.pose.position.z = 1.3
+    targetOdom.pose.pose.orientation.x = q[0]
+    targetOdom.pose.pose.orientation.y = q[1]
+    targetOdom.pose.pose.orientation.z = q[2]
+    targetOdom.pose.pose.orientation.w = q[3]
+
+    uav_target_odom_pub.publish(targetOdom)
+
+    targetPose = PoseWithCovarianceStamped()
+    targetPose.header = targetOdom.header
+    targetPose.pose.pose = targetOdom.pose.pose
+    uav_target_pose_pub.publish(targetPose)
     
 def target_publisher():
     

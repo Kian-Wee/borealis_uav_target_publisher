@@ -37,6 +37,7 @@ The topics can be remapped or changed in the launch files.
 Currently the multiplexer only accepts the following strings <br />
 * "Gun" : To select Gun target following mode
 * "FollowMe" : To select human follow me mode
+* "Human" : TBC
 
 The multiplexer can be **Dactivated** by inputting any other string. 
 

@@ -4,7 +4,8 @@
   <!-- Follow Me Target Publisher -->
   <include file="$(find borealis_uav_target_publisher)/launch/follow_me_target_publisher.launch">
     <arg name="robot_name" value="$(arg uav1_name)"/>
-    <arg name="follow_distance" value="4.0"/>
+    <!--previously tested 4-->
+    <arg name="follow_distance" value="2.5"/>
   </include>
   <!-- Gun Target Publisher -->
   <include file="$(find borealis_uav_target_publisher)/launch/gun_target_publisher.launch">
